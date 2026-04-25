@@ -1,0 +1,42 @@
+export const defaultRecommendations = [
+  {
+    _id: "striver-dsa",
+    title: "Striver A2Z DSA Playlist",
+    description: "Complete DSA roadmap covering beginner to advanced problems.",
+    platform: "YouTube",
+    link: "https://www.youtube.com/playlist?list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY",
+    image: "https://img.youtube.com/vi/0bHoB32fuj0/maxresdefault.jpg",
+  },
+  {
+    _id: "harkirat-cohort",
+    title: "Harkirat Singh Full Stack Cohort Intro",
+    description: "Understand full-stack development roadmap and cohort learning approach.",
+    platform: "YouTube",
+    link: "https://www.youtube.com/watch?v=example",
+    image: "https://img.youtube.com/vi/example/maxresdefault.jpg",
+  },
+  {
+    _id: "andrew-ng-ml",
+    title: "Andrew Ng Machine Learning (Coursera)",
+    description: "World famous ML course recommended for beginners.",
+    platform: "Coursera",
+    link: "https://www.coursera.org/learn/machine-learning",
+    image: "https://d3njjcbhbojbot.cloudfront.net/web/images/favicons/apple-touch-icon-180x180.png",
+  },
+  {
+    _id: "udemy-webdev",
+    title: "Complete Web Development Bootcamp (Udemy)",
+    description: "Full stack web development course covering HTML, CSS, JS, Node.",
+    platform: "Udemy",
+    link: "https://www.udemy.com/",
+    image: "https://img-c.udemycdn.com/course/480x270/1565838_e54e_16.jpg",
+  },
+  {
+    _id: "freecodecamp-ai",
+    title: "FreeCodeCamp AI / ML Full Course",
+    description: "Hands-on AI projects and ML fundamentals.",
+    platform: "YouTube",
+    link: "https://www.youtube.com/watch?v=example",
+    image: "https://img.youtube.com/vi/example/maxresdefault.jpg",
+  },
+];

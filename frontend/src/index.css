@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 25s linear infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+@keyframes glowText {
+  0%, 100% {
+    color: white;
+    text-shadow: none;
+  }
+  50% {
+    color: #22d3ee;
+    text-shadow: 0 0 18px rgba(34, 211, 238, 0.9);
+  }
+}
+
+.animate-glow1 { animation: glowText 6s infinite; animation-delay: 0s; }
+.animate-glow2 { animation: glowText 6s infinite; animation-delay: 0.8s; }
+.animate-glow3 { animation: glowText 6s infinite; animation-delay: 1.6s; }
+.animate-glow4 { animation: glowText 6s infinite; animation-delay: 2.4s; }
+.animate-glow5 { animation: glowText 6s infinite; animation-delay: 3.2s; }
+.animate-glow6 { animation: glowText 6s infinite; animation-delay: 4s; }
+
+.color-empty { fill: #ebedf0; }
+.color-github-1 { fill: #9be9a8; }
+.color-github-2 { fill: #40c463; }
+.color-github-3 { fill: #30a14e; }
+.color-github-4 { fill: #216e39; }
