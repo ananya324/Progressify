@@ -124,32 +124,12 @@ frontend/
 
 ---
 
-
-### Dashboard
-
-* GitHub activity heatmap
-* LeetCode progress tracking
-* Daily learning insights
-
-### Course Management
-
-* Save and organize resources
-* Quick course access
-* Custom learning links
-
-### Discover Page
-
-* YouTube recommendations
-* Community discussions
-
----
-
 ## Installation
 
 ### Clone the repository
 
 ```bash id="mn0v4m"
-git clone <your-github-repo-url>
+git clone https://github.com/ananya324/Progressify.git
 cd progressify
 ```
 
