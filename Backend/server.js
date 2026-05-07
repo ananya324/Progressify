@@ -24,7 +24,10 @@ const PORT = 5000;
 //Allows frontend (likely Vite React on port 5173) to call backend
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://progressify-nine.vercel.app",
+    ],
     credentials: true,
   })
 );
