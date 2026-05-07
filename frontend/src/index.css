@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 25s linear infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+@keyframes glowText {
+  0%, 100% {
+    color: white;
+    text-shadow: none;
+  }
+  50% {
+    color: #22d3ee;
+    text-shadow: 0 0 18px rgba(34, 211, 238, 0.9);
+  }
+}
+
+.animate-glow1 { animation: glowText 6s infinite; animation-delay: 0s; }
+.animate-glow2 { animation: glowText 6s infinite; animation-delay: 0.8s; }
+.animate-glow3 { animation: glowText 6s infinite; animation-delay: 1.6s; }
+.animate-glow4 { animation: glowText 6s infinite; animation-delay: 2.4s; }
+.animate-glow5 { animation: glowText 6s infinite; animation-delay: 3.2s; }
+.animate-glow6 { animation: glowText 6s infinite; animation-delay: 4s; }
+
+.color-empty { fill: #ebedf0; }
+.color-github-1 { fill: #9be9a8; }
+.color-github-2 { fill: #40c463; }
+.color-github-3 { fill: #30a14e; }
+.color-github-4 { fill: #216e39; }
+/* Hide scrollbar but keep scroll functionality */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Optional: show on hover (premium feel) */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 999px;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Optional hover for Firefox (not perfect support) */
+.custom-scrollbar:hover {
+  scrollbar-width: thin;
+}
+/* 🔥 Hide scrollbar but keep scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+/* HEATMAP BASE */
+.react-calendar-heatmap .color-empty {
+  fill: #1f2937; /* gray-800 */
+}
+
+/* LEVELS */
+.react-calendar-heatmap .color-github-1 {
+  fill: #0e4429;
+}
+
+.react-calendar-heatmap .color-github-2 {
+  fill: #006d32;
+}
+
+.react-calendar-heatmap .color-github-3 {
+  fill: #26a641;
+}
+
+.react-calendar-heatmap .color-github-4 {
+  fill: #39d353;
+}
+
+/* HOVER EFFECT */
+.react-calendar-heatmap rect:hover {
+  stroke: #ffffff;
+  stroke-width: 1px;
+}
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll-reverse {
+  animation: scrollReverse 30s linear infinite;
+}
+
+.animate-scroll:hover,
+.animate-scroll-reverse:hover {
+  animation-play-state: paused;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
