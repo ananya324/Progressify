@@ -7,7 +7,7 @@ import Search from "./pages/Search";
 import CourseDetails from "./pages/CourseDetails";
 import MyCourses from "./pages/MyCourses";
 import Navbar from "./components/Navbar";
-import Progress from "./pages/progress";
+import Progress from "./pages/Progress";
 import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./context/AuthContext";
 import { useLocation } from "react-router-dom";
