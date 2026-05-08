@@ -23,7 +23,6 @@ The goal is simple:
 > Organize learning. Track progress. Stay consistent.
 
 ---
-
 ## Features
 
 ### Authentication
