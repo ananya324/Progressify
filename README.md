@@ -8,7 +8,7 @@ A full-stack learning management platform where students can organize learning r
 
 # Overview
 
-Students often learn from multiple platforms like YouTube playlists, coding websites, GitHub repositories, Reddit discussions, and online courses.
+Students often learn from multiple platforms like YouTube playlists, coding websites, GitHub repositories and online courses.
 
 Progressify helps centralize everything into a single personalized dashboard where users can save, organize, and track their learning journey efficiently.
 
