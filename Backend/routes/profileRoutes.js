@@ -10,5 +10,4 @@ const router = express.Router();
 
 router.get("/", protect, getProfile);
 router.put("/", protect, updateProfile);
-console.log("USING FILE:", require.resolve("../controllers/profileController"));
 module.exports = router;
