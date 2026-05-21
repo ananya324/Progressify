@@ -3,7 +3,14 @@ import "react-calendar-heatmap/dist/styles.css";
 
 const ActivityHeatmap = ({ data }) => {
   return (
-    <div>
+    <div className="
+  bg-white/5
+  border border-white/10
+  backdrop-blur-xl
+  rounded-3xl
+  p-6
+  shadow-2xl
+">
 
       <CalendarHeatmap
         startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
@@ -11,9 +18,11 @@ const ActivityHeatmap = ({ data }) => {
         values={data}
         classForValue={(value) => {
           if (!value) return "color-empty";
-          if (value.count >= 5) return "color-github-4";
-          if (value.count >= 3) return "color-github-3";
-          if (value.count >= 1) return "color-github-2";
+
+          if (value.count >= 7) return "color-github-4";
+          if (value.count >= 5) return "color-github-3";
+          if (value.count >= 3) return "color-github-2";
+
           return "color-github-1";
         }}
       />
