@@ -3,17 +3,15 @@ import "react-calendar-heatmap/dist/styles.css";
 
 const ActivityHeatmap = ({ data }) => {
   return (
-    <div className="
-  bg-white/5
-  border border-white/10
-  backdrop-blur-xl
-  rounded-3xl
-  p-6
-  shadow-2xl
-">
-
+    <div>
       <CalendarHeatmap
-        startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
+        startDate={
+          new Date(
+            new Date().setFullYear(
+              new Date().getFullYear() - 1
+            )
+          )
+        }
         endDate={new Date()}
         values={data}
         classForValue={(value) => {

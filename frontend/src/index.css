@@ -1,12 +1,5 @@
 @import "tailwindcss";
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
+
 
 .animate-scroll {
   display: flex;
@@ -70,31 +63,8 @@
 .custom-scrollbar:hover {
   scrollbar-width: thin;
 }
-/* 🔥 Hide scrollbar but keep scroll */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
 
 
-/* HOVER */
-.react-calendar-heatmap rect:hover {
-  transform: scale(1.12);
-  stroke: rgba(255,255,255,0.8);
-  stroke-width: 1px;
-  filter: drop-shadow(0 0 6px rgba(34,197,94,0.6));
-}
-.react-calendar-heatmap rect {
-  rx: 3px;
-  ry: 3px;
-  transition: all 0.2s ease;
-}
-
-/* TEXT */
 .react-calendar-heatmap text {
   fill: #6b7280;
   font-size: 10px;
@@ -102,27 +72,41 @@
 
 /* EMPTY */
 .react-calendar-heatmap .color-empty {
-  fill: rgba(255,255,255,0.05);
+  fill: #161b22;
 }
 
-/* 1-2 commits */
+/* LOW */
 .react-calendar-heatmap .color-github-1 {
-  fill: #4ade80;
+  fill: #9be9a8;
 }
 
-/* 3-4 commits */
+/* MEDIUM */
 .react-calendar-heatmap .color-github-2 {
-  fill: #22c55e;
+  fill: #40c463;
 }
 
-/* 5-6 commits */
+/* HIGH */
 .react-calendar-heatmap .color-github-3 {
-  fill: #16a34a;
+  fill: #30a14e;
 }
 
-/* 7+ commits */
+/* VERY HIGH */
 .react-calendar-heatmap .color-github-4 {
-  fill: #15803d;
+  fill: #216e39;
+}
+
+/* CELLS */
+.react-calendar-heatmap rect {
+  rx: 3px;
+  ry: 3px;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+.react-calendar-heatmap rect:hover {
+  transform: scale(1.1);
+  stroke: rgba(255,255,255,0.7);
+  stroke-width: 1px;
 }
 @keyframes scroll {
   0% { transform: translateX(0); }
@@ -159,12 +143,4 @@
 
 .animate-slideIn {
   animation: slideIn 0.3s ease;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
