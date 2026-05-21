@@ -15,7 +15,9 @@ const ActivityHeatmap = ({ data }) => {
         endDate={new Date()}
         values={data}
         classForValue={(value) => {
-          if (!value) return "color-empty";
+          if (!value || value.count === 0) {
+            return "color-empty";
+          }
 
           if (value.count >= 7) return "color-github-4";
           if (value.count >= 5) return "color-github-3";
