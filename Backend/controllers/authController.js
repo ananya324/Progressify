@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 //This function creates a token for the user after login or register
 //Give user a secure identity so they don’t need to login again and again
+//jwt.sign(payload, secret, options)
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
