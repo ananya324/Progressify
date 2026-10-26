@@ -1,383 +1,186 @@
-import MotivationBanner from "../components/MotivationBanner";
-import ScrollingRecommendations from "../components/ScrollingRecommendations";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import demoVideo from "../assets/Demo.mp4";
-import MouseGlow from "../components/MouseGlow";
-import FloatingParticles from "../components/FloatingParticles";
 
+const courses = [
+  {
+    _id: "gfg-dsa",
+    title: "GeeksforGeeks DSA Self-Paced",
+    description: "Structured DSA course with theory and practice problems.",
+    image: "https://static.startuptalky.com/2021/06/GeeksforGeeks-StartupTalky.jpg",
+    link: "https://practice.geeksforgeeks.org/courses/dsa-self-paced",
+  },
+  {
+    _id: "tuf-dsa",
+    title: "Take U Forward DSA",
+    description: "Striver's widely recommended DSA playlist.",
+    image: "https://img.youtube.com/vi/N0MgLvceX7M/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=N0MgLvceX7M",
+  },
+  {
+    _id: "ml-basics",
+    title: "Machine Learning Basics",
+    description: "A beginner-friendly introduction to ML.",
+    image: "https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/machinelearning.png",
+    link: "https://youtu.be/i_LwzRVP7bg?si=g-6nm6XenvPF3fnY",
+  },
+  {
+    _id: "harkirat-cohort",
+    title: "100xDevs Web Dev Cohort",
+    description: "Full stack and DevOps cohort by Harkirat Singh.",
+    image: "https://appxcontent.kaxa.in/paid_course3/2024-07-07-0.8201249093606604.png",
+    link: "https://harkirat.classx.co.in/new-courses/12-complete-web-development-devops-cohort",
+  },
+];
 
-import {
-  FiArrowRight,
-  FiBookOpen,
-  FiTrendingUp,
-  FiTarget,
-  FiPlay,
-} from "react-icons/fi";
+const picks = [
+  { _id: 1, title: "Striver DSA Playlist", description: "The DSA playlist developers recommend most." },
+  { _id: 2, title: "Harkirat Backend Cohort", description: "A structured path through backend and system design." },
+  { _id: 3, title: "FastAI Practical ML", description: "Hands-on ML course that comes up again and again on Reddit." },
+];
+
+const steps = [
+  { word: "Save", desc: "Paste a link to any course, playlist, blog or repo. It lands in My courses." },
+  { word: "Track", desc: "Every time you open something, today's square on your heatmap gets darker." },
+  { word: "Finish", desc: "See your streak, your quiet weeks, and what you haven't touched in a while." },
+];
+
+// A fixed 20-week pattern so the hero grid looks the same on every load.
+const WEEKS = 20;
+const pattern = Array.from({ length: WEEKS * 7 }, (_, i) => {
+  const w = Math.floor(i / 7);
+  const d = i % 7;
+  const n = Math.sin(w * 12.9898 + d * 78.233) * 43758.5453;
+  const r = n - Math.floor(n);
+  const ramp = 0.25 + (w / WEEKS) * 0.55; // activity builds over time
+  if (r > ramp + 0.15) return 0;
+  if (r > ramp - 0.05) return 1;
+  if (r > ramp - 0.25) return 2;
+  return r > 0.1 ? 3 : 4;
+});
+const level = [
+  "bg-[#dfe2d7]",
+  "bg-[#f3e977]",
+  "bg-[#e2cb1a]",
+  "bg-[#8f7f00]",
+  "bg-ink",
+];
 
 export default function Home() {
   const navigate = useNavigate();
 
-  const steps = [
-    {
-      word: "Save",
-      desc: "Collect courses, playlists, blogs, and resources in one place.",
-      color: "text-indigo-300",
-    },
-    {
-      word: "Track",
-      desc: "Monitor your progress and stay consistent while learning.",
-      color: "text-indigo-400",
-    },
-    {
-      word: "Complete",
-      desc: "Turn scattered learning into real skill development.",
-      color: "text-indigo-500",
-    },
-  ];
-
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % steps.length);
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const courses = [
-    {
-      _id: "gfg-dsa",
-      title: "GeeksforGeeks DSA Self-Paced",
-      description: "Structured DSA course with theory + practice problems",
-      image:
-        "https://static.startuptalky.com/2021/06/GeeksforGeeks-StartupTalky.jpg",
-      link: "https://practice.geeksforgeeks.org/courses/dsa-self-paced",
-    },
-    {
-      _id: "tuf-dsa",
-      title: "Take U Forward DSA",
-      description: "Striver’s highly recommended DSA playlist",
-      image: "https://img.youtube.com/vi/N0MgLvceX7M/hqdefault.jpg",
-      link: "https://www.youtube.com/watch?v=N0MgLvceX7M",
-    },
-    {
-      _id: "ml-basics",
-      title: "Machine Learning Basics",
-      description: "Beginner-friendly ML introduction",
-      image:
-        "https://www.freecodecamp.org/news/content/images/size/w2000/2022/09/machinelearning.png",
-      link: "https://youtu.be/i_LwzRVP7bg?si=g-6nm6XenvPF3fnY",
-    },
-    {
-      _id: "harkirat-cohort",
-      title: "100xDevs Web Dev Cohort",
-      description: "Full stack + DevOps cohort by Harkirat Singh",
-      image:
-        "https://appxcontent.kaxa.in/paid_course3/2024-07-07-0.8201249093606604.png",
-      link:
-        "https://harkirat.classx.co.in/new-courses/12-complete-web-development-devops-cohort",
-    },
-  ];
-
-  const recommendations = [
-    {
-      _id: 1,
-      title: "Striver DSA Playlist",
-      description: "Most recommended DSA playlist in developer community",
-    },
-    {
-      _id: 2,
-      title: "Harkirat Backend Cohort",
-      description: "Best structured backend + system design learning path",
-    },
-    {
-      _id: 3,
-      title: "FastAI Practical ML",
-      description: "Hands-on ML course widely recommended on Reddit",
-    },
-  ];
-
   return (
-    <div className="relative min-h-screen px-6 md:px-12 py-5 text-white bg-gradient-to-b from-[#0b0f1a] via-[#0a0e17] to-black overflow-hidden">
-      <MouseGlow />
-
-      <FloatingParticles />
-
-      {/* Grid Overlay */}
-      <div className="absolute inset-0 z-0 opacity-[0.03]">
-        <div
-          className="h-full w-full"
-          style={{
-            backgroundImage: `
-        linear-gradient(to right, white 1px, transparent 1px),
-        linear-gradient(to bottom, white 1px, transparent 1px)
-      `,
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </div>
-
-      {/* Gradient Blobs */}
-      <div className="absolute top-[-120px] left-[-120px] h-[320px] w-[320px] bg-indigo-500/20 rounded-full blur-3xl" />
-
-      <div className="absolute bottom-[-120px] right-[-120px] h-[320px] w-[320px] bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="relative z-10">
-        {/* HERO */}
-        <section className="text-center mt-10 mb-24 max-w-5xl mx-auto">
-
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300 mb-6">
-            <span className="h-2 w-2 rounded-full bg-green-400"></span>
-            Build your personal learning system
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-semibold leading-tight tracking-tight">
-            Your learning,
-            <br />
-            <span className="text-indigo-400">
-              finally organized.
-            </span>
+    <div className="bg-paper text-ink">
+      {/* HERO */}
+      <section className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-14 md:px-8 md:pt-24 lg:grid-cols-[1.05fr_1fr]">
+        <div>
+          <h1 className="text-5xl font-extrabold leading-[0.98] md:text-7xl">
+            Save the course. Then actually finish it.
           </h1>
-
-          <p className="mt-6 text-gray-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
-            Organize courses, save resources, track progress,
-            and stay consistent while learning web development,
-            DSA, machine learning, and more.
+          <p className="mt-7 max-w-md text-lg leading-relaxed text-ink-soft">
+            Progressify keeps your courses, playlists and links in one list and
+            shows, day by day, whether you opened them.
           </p>
-
-          {/* Animated Words */}
-          <div className="mt-12 h-[90px] flex flex-col items-center justify-center">
-            <h2
-              className={`text-4xl md:text-5xl font-semibold transition-all duration-500 ${steps[index].color}`}
-            >
-              {steps[index].word}
-            </h2>
-
-            <p className="text-gray-500 mt-3 text-sm md:text-base">
-              {steps[index].desc}
-            </p>
-          </div>
-
-          {/* CTA */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-
-            <button
-              onClick={() => navigate("/register")}
-              className="flex items-center gap-2 px-7 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-sm font-medium transition shadow-lg shadow-indigo-600/20"
-            >
-              Start Learning
-              <FiArrowRight />
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <button onClick={() => navigate("/register")} className="btn btn-primary">
+              Create a free account
             </button>
-
-            <a
-              href="#demo"
-              className="flex items-center gap-2 px-7 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm transition"
-            >
-              <FiPlay />
-              Watch Demo
+            <a href="#demo" className="btn btn-ghost">
+              Watch the demo
             </a>
           </div>
-        </section>
-        {/* FEATURES */}
-        <section className="max-w-6xl mx-auto mb-28">
+        </div>
 
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-semibold">
-              Everything you need to stay consistent
-            </h2>
-
-            <p className="text-gray-500 mt-3 text-sm md:text-base">
-              Simple tools designed for focused learning.
-            </p>
+        <figure aria-label="Example activity heatmap">
+          <div
+            className="grid gap-[3px]"
+            style={{
+              gridTemplateRows: "repeat(7, 1fr)",
+              gridAutoFlow: "column",
+              gridTemplateColumns: `repeat(${WEEKS}, 1fr)`,
+            }}
+          >
+            {pattern.map((l, i) => (
+              <span
+                key={i}
+                className={`aspect-square ${level[l]} motion-safe:animate-[cellIn_300ms_both]`}
+                style={{ animationDelay: `${Math.floor(i / 7) * 45}ms` }}
+              />
+            ))}
           </div>
+          <figcaption className="mt-4 max-w-sm text-sm text-ink-soft">
+            Twenty weeks of showing up. Darker squares mean more things opened that day.
+          </figcaption>
+        </figure>
+      </section>
 
-          <div className="grid md:grid-cols-3 gap-6">
+      {/* HOW IT WORKS */}
+      <section className="border-y-[1.5px] border-ink">
+        <div className="mx-auto grid max-w-6xl md:grid-cols-3">
+          {steps.map((s, i) => (
+            <div
+              key={s.word}
+              className={`px-5 py-10 md:px-8 ${i > 0 ? "border-t-[1.5px] border-ink md:border-l-[1.5px] md:border-t-0" : ""}`}
+            >
+              <h2 className="text-3xl font-bold">{s.word}</h2>
+              <p className="mt-3 max-w-xs leading-relaxed text-ink-soft">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="
-group
-bg-white/5
-border border-white/10
-rounded-2xl
-p-7
-hover:border-indigo-500/30
-hover:bg-white/[0.07]
-hover:-translate-y-1
-transition-all
-duration-300
-backdrop-blur-xl
-">
+      {/* DEMO */}
+      <section id="demo" className="mx-auto max-w-5xl scroll-mt-20 px-5 py-20 md:px-8">
+        <h2 className="mb-6 text-3xl font-bold">See it in use</h2>
+        <div className="border-[1.5px] border-ink bg-sheet shadow-[6px_6px_0_var(--color-mark)]">
+          <video className="block w-full" src={demoVideo} controls muted autoPlay loop playsInline />
+        </div>
+      </section>
 
-              <div className="h-12 w-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-5">
-                <FiBookOpen
-                  className="
-    text-indigo-400
-    text-lg
-    transition-transform
-    duration-300
-    group-hover:scale-110
-    group-hover:rotate-6
-  "
-                />
-              </div>
+      {/* POPULAR RESOURCES */}
+      <section className="mx-auto max-w-6xl px-5 pb-20 md:px-8">
+        <div className="mb-8 max-w-xl">
+          <h2 className="text-3xl font-bold">What other learners are saving</h2>
+          <p className="mt-2 text-ink-soft">Open one, or paste your own link once you're signed in.</p>
+        </div>
 
-              <h3 className="text-lg font-medium mb-3">
-                Save everything
+        <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {courses.map((c) => (
+            <a
+              key={c._id}
+              href={c.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block"
+            >
+              <img
+                src={c.image}
+                alt=""
+                className="aspect-video w-full border-[1.5px] border-ink object-cover"
+              />
+              <h3 className="mt-3 text-lg font-bold leading-snug group-hover:underline decoration-2 underline-offset-4">
+                {c.title}
               </h3>
+              <p className="mt-1 text-sm text-ink-soft">{c.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
 
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Keep all your courses, YouTube playlists,
-                blogs, and learning resources organized
-                in one place.
-              </p>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-green-500/30 transition">
-
-              <div className="h-12 w-12 rounded-xl bg-green-500/10 flex items-center justify-center mb-5">
-                <FiTrendingUp
-                  className="
-    text-green-400
-    text-lg
-    transition-transform
-    duration-300
-    group-hover:scale-110
-    group-hover:rotate-6
-  "
-                />
-              </div>
-
-              <h3 className="text-lg font-medium mb-3">
-                Track progress
-              </h3>
-
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Monitor completed lessons and know exactly
-                what to continue next without losing momentum.
-              </p>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-orange-500/30 transition">
-
-              <div className="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-5">
-                <FiTarget
-                  className="
-    text-orange-400
-    text-lg
-    transition-transform
-    duration-300
-    group-hover:scale-110
-    group-hover:rotate-6
-  "
-                />
-              </div>
-
-              <h3 className="text-lg font-medium mb-3">
-                Stay consistent
-              </h3>
-
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Build discipline and maintain a structured
-                learning habit that actually lasts.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-        {/* DEMO VIDEO */}
-        <section
-          id="demo"
-          className="max-w-5xl mx-auto mb-28"
-        >
-          <div className="rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm shadow-2xl">
-
-
-            <video
-              className="w-full"
-              src={demoVideo}
-              controls
-              muted
-              autoPlay
-              loop
-            />
-
-          </div>
-
-          <p className="text-center text-gray-500 text-sm mt-4">
-            A quick walkthrough of how the platform works.
-          </p>
-        </section>
-
-        {/* POPULAR RESOURCES */}
-        <section className="mb-28 max-w-7xl mx-auto">
-
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-semibold">
-                Popular learning resources
-              </h2>
-
-              <p className="text-gray-500 text-sm mt-1">
-                Add your favorite courses and track them easily.
-              </p>
-            </div>
-          </div>
-
-          <div className="overflow-hidden">
-            <div className="flex gap-5 w-max animate-scroll-reverse">
-
-              {[...courses, ...courses].map((course, i) => (
-                <a
-                  key={i}
-                  href={course.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-w-[290px] bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-indigo-500/40 hover:-translate-y-1 transition duration-300"
-                >
-
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="h-44 w-full object-cover"
-                  />
-
-                  <div className="p-5">
-                    <h3 className="font-medium text-base">
-                      {course.title}
-                    </h3>
-
-                    <p className="text-gray-500 text-sm mt-2 line-clamp-2">
-                      {course.description}
-                    </p>
-                  </div>
-                </a>
-              ))}
-
-            </div>
-          </div>
-        </section>
-
-
-
-        {/* COMMUNITY PICKS */}
-        <section className="max-w-6xl mx-auto mb-12">
-
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold">
-              Community picks
-            </h2>
-
-            <p className="text-gray-500 text-sm mt-1">
-              Popular recommendations from learners.
-            </p>
-          </div>
-
-          <ScrollingRecommendations
-            recommendations={recommendations}
-          />
-        </section>
-      </div>
+      {/* COMMUNITY PICKS */}
+      <section className="mx-auto max-w-6xl px-5 pb-24 md:px-8">
+        <h2 className="mb-6 text-3xl font-bold">Recommended by the community</h2>
+        <ul className="border-t-[1.5px] border-ink">
+          {picks.map((p) => (
+            <li
+              key={p._id}
+              className="grid gap-1 border-b border-rule py-5 md:grid-cols-[18rem_1fr] md:gap-8"
+            >
+              <h3 className="text-lg font-bold">{p.title}</h3>
+              <p className="text-ink-soft">{p.description}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

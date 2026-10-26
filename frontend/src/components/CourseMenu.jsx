@@ -39,62 +39,50 @@ export default function CourseMenu({ courseId, onDelete }) {
   return (
     <>
       <div className="relative" ref={menuRef}>
-        
-        {/* 3 dots */}
         <button
           onClick={() => setOpen(!open)}
-          className="text-white text-lg px-2 hover:bg-gray-700 rounded-md transition"
+          aria-label="Course options"
+          aria-expanded={open}
+          className="h-8 w-8 border-[1.5px] border-ink bg-sheet text-lg leading-none hover:bg-mark-soft"
         >
-          ⋮
+          ⋯
         </button>
 
         {open && (
-          <div className="absolute right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-xl shadow-xl overflow-hidden">
-            
+          <div className="absolute right-0 mt-1 w-32 border-[1.5px] border-ink bg-sheet">
             <button
               onClick={() => {
                 setShowConfirm(true);
                 setOpen(false);
               }}
-              className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800 transition"
+              className="block w-full px-3 py-2 text-left text-sm font-semibold text-alert hover:bg-mark-soft"
             >
               Delete
             </button>
-
           </div>
         )}
       </div>
 
-      {/* 🔥 CUSTOM CONFIRM MODAL */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 w-80 shadow-lg">
-            
-            <h3 className="text-white text-lg font-semibold mb-2">
-              Delete Course?
-            </h3>
-
-            <p className="text-gray-400 text-sm mb-5">
-              Are you sure you want to delete this course?
+        <div role="dialog" aria-modal="true" aria-labelledby="del-title" className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 px-4">
+          <div className="w-full max-w-sm border-[1.5px] border-ink bg-sheet p-6 shadow-[6px_6px_0_var(--color-mark)]">
+            <h3 id="del-title" className="mb-2 text-lg font-bold">Delete this course?</h3>
+            <p className="mb-6 text-sm text-ink-soft">
+              It will be removed from My courses. Your activity history stays.
             </p>
 
             <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition"
-              >
+              <button onClick={() => setShowConfirm(false)} className="btn btn-ghost">
                 Cancel
               </button>
-
               <button
                 onClick={handleDelete}
                 disabled={loading}
-                className="px-4 py-2 rounded-md bg-red-500 text-black hover:bg-red-400 transition"
+                className="btn bg-alert text-white border-alert"
               >
-                {loading ? "Deleting..." : "Delete"}
+                {loading ? "Deleting" : "Delete course"}
               </button>
             </div>
-
           </div>
         </div>
       )}

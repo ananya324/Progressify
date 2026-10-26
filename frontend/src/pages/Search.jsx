@@ -2,8 +2,6 @@ import { useState } from "react";
 import { fetchDiscover, fetchAISummary } from "../api/recommendation.api";
 import { addUserCourse } from "../api/userCourse.api";
 
-import { FiSearch, FiPlus, FiCheck, FiVideo, FiBookOpen } from "react-icons/fi";
-import { FaReddit } from "react-icons/fa";
 
 export default function Search() {
   const [query, setQuery] = useState("");
@@ -12,14 +10,14 @@ export default function Search() {
   const [addedIds, setAddedIds] = useState([]);
   const [summary, setSummary] = useState("");
 
-  const handleSearch = async () => {
-    if (!query.trim()) return;
+  const handleSearch = async (q = query) => {
+    if (!q.trim()) return;
 
     setLoading(true);
     try {
       const [discoverRes, aiRes] = await Promise.all([
-        fetchDiscover(query),
-        fetchAISummary(query),
+        fetchDiscover(q),
+        fetchAISummary(q),
       ]);
 
       setData(discoverRes);
@@ -49,288 +47,144 @@ export default function Search() {
       setAddedIds((prev) => [...prev, id]);
     } catch (err) {
       console.error(err);
-      alert("Failed to add ❌");
+      alert("Could not add this to your courses. Try again.");
     }
   };
 
+  const ideas = [
+    { title: "Web development", query: "Full Stack Web Development" },
+    { title: "Data structures and algorithms", query: "Data Structures and Algorithms" },
+    { title: "Machine learning", query: "Machine Learning basics" },
+    { title: "DevOps", query: "DevOps roadmap" },
+    { title: "Backend", query: "Node.js backend" },
+    { title: "Interview prep", query: "coding interview preparation" },
+  ];
+
+  const renderCards = (items, kind) => (
+    <div className="grid gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((item, i) => {
+        const id = kind === "video" ? item.videoId : item.playlistId;
+        const href =
+          kind === "video"
+            ? `https://www.youtube.com/watch?v=${id}`
+            : `https://www.youtube.com/playlist?list=${id}`;
+        const isAdded = addedIds.includes(id);
+
+        return (
+          <article key={i} className="flex flex-col">
+            <a href={href} target="_blank" rel="noopener noreferrer" className="group block">
+              <img
+                src={item.thumbnail}
+                alt=""
+                className="aspect-video w-full border-[1.5px] border-ink object-cover"
+              />
+              <h4 className="mt-3 font-bold leading-snug line-clamp-2 group-hover:underline underline-offset-4 decoration-2">
+                {item.title}
+              </h4>
+            </a>
+            <button
+              disabled={isAdded}
+              onClick={() => handleAdd(item, kind)}
+              className="btn btn-ghost mt-3 self-start !py-1.5 text-sm"
+            >
+              {isAdded ? "Saved" : "Save to my courses"}
+            </button>
+          </article>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0b0f1a] via-[#0a0e17] to-black text-white px-6 py-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl">
+      <h1 className="text-3xl font-extrabold md:text-4xl">Discover</h1>
+      <p className="mt-1 text-ink-soft">
+        Search a skill and get YouTube videos, playlists and what developers are saying on Reddit.
+      </p>
 
-        {/* HEADER */}
-        <h2 className="text-3xl font-semibold mb-6 flex items-center gap-2">
-          <FiSearch className="text-indigo-400" />
-          Discover Courses
-        </h2>
+      <form
+        onSubmit={(e) => { e.preventDefault(); if (!loading) handleSearch(); }}
+        className="mb-10 mt-6 flex flex-col gap-3 sm:flex-row"
+      >
+        <input
+          type="text"
+          aria-label="Search for a skill"
+          placeholder="React, DevOps, system design"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="field flex-1"
+        />
+        <button type="submit" disabled={loading} className="btn btn-primary">
+          {loading ? "Searching" : "Search"}
+        </button>
+      </form>
 
-        {/* SEARCH */}
-        <div className="flex gap-3 mb-10">
-          <input
-            type="text"
-            placeholder="Search skills (React, DevOps...)"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !loading && handleSearch()}
-            className="flex-1 px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 
-            focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-
-          <button
-            onClick={handleSearch}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-medium"
-          >
-
-            <FiSearch />
-            {loading ? "..." : "Search"}
-          </button>
-        </div>
-        {!data && (
-          <div className="mt-12 max-w-4xl mx-auto">
-
-            {/* 🔹 Title */}
-            <h3 className="text-lg text-gray-300 mb-6">
-              Explore ideas
-            </h3>
-
-            {/* 🔹 Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-
-              {[
-                { title: "🚀 Web Dev", query: "Full Stack Web Development" },
-                { title: "🧠 DSA", query: "Data Structures and Algorithms" },
-                { title: "🤖 AI/ML", query: "Machine Learning basics" },
-                { title: "⚙️ DevOps", query: "DevOps roadmap" },
-                { title: "📦 Backend", query: "Node.js backend" },
-                { title: "🎯 Interview Prep", query: "coding interview preparation" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    setQuery(item.query);
-                    handleSearch();
-                  }}
-                  className="
-            cursor-pointer rounded-xl p-4
-            bg-slate-800 border border-slate-700
-            hover:border-indigo-500 hover:bg-slate-700
-            transition-all duration-200
-          "
+      {!data && !loading && (
+        <section>
+          <h2 className="mb-3 text-lg font-bold">Try one of these</h2>
+          <ul className="border-t-[1.5px] border-ink">
+            {ideas.map((item) => (
+              <li key={item.query} className="border-b border-rule">
+                <button
+                  onClick={() => { setQuery(item.query); handleSearch(item.query); }}
+                  className="flex w-full items-baseline justify-between gap-4 py-4 text-left hover:bg-mark-soft"
                 >
-                  <p className="text-sm font-medium text-white">
-                    {item.title}
-                  </p>
+                  <span className="text-lg font-semibold">{item.title}</span>
+                  <span className="text-sm text-ink-soft">{item.query}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-                  <p className="text-xs text-gray-400 mt-1">
-                    {item.query}
-                  </p>
-                </div>
-              ))}
+      {loading && <p className="text-ink-soft">Searching</p>}
 
-            </div>
+      {!loading && data && !data.videos?.length && !data.playlists?.length && (
+        <p className="text-ink-soft">No results for that search. Try a broader term.</p>
+      )}
 
-          </div>
-        )}
+      {summary && (
+        <section className="mb-12 max-w-3xl border-l-[5px] border-mark bg-sheet p-5">
+          <h2 className="mb-2 text-lg font-bold">Overview</h2>
+          <p className="leading-relaxed text-ink-soft">{summary}</p>
+        </section>
+      )}
 
-        {/* LOADING */}
-        {loading && (
-          <p className="text-slate-400 mb-4">Searching...</p>
-        )}
+      {data?.videos?.length > 0 && (
+        <section>
+          <h2 className="mb-5 border-b-[1.5px] border-ink pb-2 text-xl font-bold">Videos</h2>
+          {renderCards(data.videos, "video")}
+        </section>
+      )}
 
-        {/* EMPTY */}
-        {!loading &&
-          data &&
-          (!data.videos?.length && !data.playlists?.length) && (
-            <p className="text-slate-500">No results found</p>
-          )}
+      {data?.playlists?.length > 0 && (
+        <section className="mt-14">
+          <h2 className="mb-5 border-b-[1.5px] border-ink pb-2 text-xl font-bold">Playlists</h2>
+          {renderCards(data.playlists, "playlist")}
+        </section>
+      )}
 
-        {/* VIDEOS */}
-        {data?.videos?.length > 0 && (
-          <>
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <FiVideo className="text-red-400" />
-              Videos
-            </h3>
-
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {data.videos.map((video, i) => {
-                const isAdded = addedIds.includes(video.videoId);
-
-                return (
-                  <div
-                    key={i}
-                    className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden 
-                    hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10 
-                    transition flex flex-col"
-                  >
-                    <a
-                      href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-col grow"
-                    >
-                      <img
-                        src={video.thumbnail}
-                        className="w-full h-40 object-cover"
-                      />
-
-                      <p className="p-3 text-sm line-clamp-2 min-h-[48px]">
-                        {video.title}
-                      </p>
-                    </a>
-
-                    <button
-                      disabled={isAdded}
-                      onClick={() => handleAdd(video, "video")}
-                      className={`flex items-center justify-center gap-2 w-full p-2 mt-auto
-                        ${isAdded
-                          ? "bg-slate-600"
-                          : "bg-indigo-600 hover:bg-indigo-700"
-                        }`}
-                    >
-                      {isAdded ? <FiCheck /> : <FiPlus />}
-                      {isAdded ? "Added" : "Add"}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-
-        {/* PLAYLISTS */}
-        {data?.playlists?.length > 0 && (
-          <>
-            <h3 className="text-xl font-semibold mt-10 mb-4 flex items-center gap-2">
-              <FiBookOpen className="text-yellow-400" />
-              Playlists
-            </h3>
-
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {data.playlists.map((p, i) => {
-                const isAdded = addedIds.includes(p.playlistId);
-
-                return (
-                  <div
-                    key={i}
-                    className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden 
-                    hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/10 
-                    transition flex flex-col"
-                  >
-                    <a
-                      href={`https://www.youtube.com/playlist?list=${p.playlistId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-col grow"
-                    >
-                      <img
-                        src={p.thumbnail}
-                        className="w-full h-40 object-cover"
-                      />
-
-                      <p className="p-3 text-sm line-clamp-2 min-h-[48px]">
-                        {p.title}
-                      </p>
-                    </a>
-
-                    <button
-                      disabled={isAdded}
-                      onClick={() => handleAdd(p, "playlist")}
-                      className={`flex items-center justify-center gap-2 w-full p-2 mt-auto
-                        ${isAdded
-                          ? "bg-slate-600"
-                          : "bg-indigo-600 hover:bg-indigo-700"
-                        }`}
-                    >
-                      {isAdded ? <FiCheck /> : <FiPlus />}
-                      {isAdded ? "Added" : "Add"}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-        {data?.community?.length > 0 && (
-          <section className="mt-12">
-
-            {/* HEADER */}
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
-                <FaReddit className="text-orange-500" />
-                Community Insights
-              </h3>
-
-              <span className="text-xs text-gray-500">
-                Real dev discussions
-              </span>
-            </div>
-
-            {/* SCROLL CONTAINER */}
-            <div className="relative">
-
-              {/* fade edges */}
-              <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-[#0b0f1a] to-transparent z-10" />
-              <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#0b0f1a] to-transparent z-10" />
-
-              <div className="flex gap-5 overflow-x-auto pb-4 scroll-smooth no-scrollbar">
-
-                {data.community.map((post, i) => (
-                  <a
-                    key={i}
-                    href={post.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="min-w-[300px] max-w-[300px]
-            bg-gradient-to-br from-slate-800 to-slate-900
-            border border-slate-700 rounded-xl p-5
-            hover:scale-[1.03]
-            hover:border-indigo-500/40
-            hover:shadow-lg hover:shadow-indigo-500/20
-            transition flex flex-col"
-                  >
-
-                    {/* TOP */}
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-xs text-indigo-400 font-medium">
-                        r/{post.subreddit}
-                      </p>
-
-                      <span className="text-[10px] text-gray-500">
-                        Reddit
-                      </span>
-                    </div>
-
-                    {/* TITLE */}
-                    <p className="text-sm font-medium text-gray-200 line-clamp-3 leading-relaxed mb-4">
-                      {post.title}
-                    </p>
-
-                    {/* CTA */}
-                    <div className="mt-auto text-xs text-gray-400 group-hover:text-indigo-300 transition">
-                      Read discussion →
-                    </div>
-
-                  </a>
-                ))}
-
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* AI SUMMARY */}
-        {summary && (
-          <div className="mt-12 bg-slate-800 border border-slate-700 rounded-2xl p-6">
-            <h3 className="text-xl font-semibold mb-3">
-
-            </h3>
-            <p className="text-slate-300 leading-relaxed">
-              {summary}
-            </p>
-          </div>
-        )}
-
-      </div>
+      {data?.community?.length > 0 && (
+        <section className="mt-14">
+          <h2 className="mb-1 text-xl font-bold">From Reddit</h2>
+          <ul className="border-t-[1.5px] border-ink">
+            {data.community.map((post, i) => (
+              <li key={i} className="border-b border-rule">
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="grid gap-1 py-4 hover:bg-mark-soft md:grid-cols-[10rem_1fr] md:gap-6"
+                >
+                  <span className="text-sm font-semibold text-pen">r/{post.subreddit}</span>
+                  <span className="font-medium">{post.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

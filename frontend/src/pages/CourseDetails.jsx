@@ -21,14 +21,14 @@ export default function CourseDetails() {
     alert("Enrolled!");
   };
 
-  if (!course) return <p>Loading...</p>;
+  if (!course) return <p className="text-ink-soft">Loading course</p>;
 
   return (
-    <div>
-      <h2>{course.title}</h2>
-      <p>{course.description}</p>
+    <div className="max-w-2xl">
+      <h1 className="text-3xl font-extrabold md:text-4xl">{course.title}</h1>
+      <p className="mt-3 text-ink-soft">{course.description}</p>
 
-      <button onClick={enroll}>Enroll</button>
+      <button onClick={enroll} className="btn btn-primary mt-8">Enroll</button>
     </div>
   );
 }

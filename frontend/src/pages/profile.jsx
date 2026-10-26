@@ -88,161 +88,99 @@ export default function Profile() {
     }
   };
 
-  // Loading Screen
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-[#0b1220] text-gray-400">
-        Loading profile...
-      </div>
-    );
+    return <p className="text-ink-soft">Loading profile</p>;
   }
 
   return (
     <>
-      {/* Success Popup */}
       {showPopup && (
-        <div className="fixed top-5 right-5 z-50 animate-bounce">
-          <div className="bg-green-600 text-white px-5 py-3 rounded-xl shadow-2xl font-medium">
-            ✅ Profile Updated Successfully
-          </div>
+        <div role="status" className="fixed right-5 top-20 z-50 border-[1.5px] border-ink bg-mark px-5 py-3 font-semibold shadow-[4px_4px_0_var(--color-ink)]">
+          Profile saved. Taking you to the dashboard.
         </div>
       )}
 
-      {/* Error Popup */}
       {error && (
-        <div className="fixed top-20 right-5 z-50">
-          <div className="bg-red-600 text-white px-5 py-3 rounded-xl shadow-2xl font-medium">
-            ❌ {error}
-          </div>
+        <div role="alert" className="fixed right-5 top-20 z-50 border-[1.5px] border-alert bg-sheet px-5 py-3 font-semibold text-alert">
+          {error}
         </div>
       )}
 
-      <div className="min-h-screen bg-[#0b1220] text-white px-4 md:px-10 py-10">
-        
-        {/* Header */}
-        <div className="max-w-5xl mx-auto mb-6">
-          <h1 className="text-3xl font-bold">Profile Settings</h1>
+      <div className="mx-auto max-w-3xl">
+        <h1 className="text-3xl font-extrabold md:text-4xl">Profile</h1>
+        <p className="mt-1 text-ink-soft">
+          Your GitHub and LeetCode usernames feed the charts on your dashboard.
+        </p>
 
-          <p className="text-gray-400 text-sm">
-            Manage your public and coding profiles
-          </p>
-        </div>
-
-        {/* Main Grid */}
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* Left Card */}
-          <div className="bg-[#111827] p-6 rounded-2xl shadow-lg space-y-4">
-            <h2 className="text-lg font-semibold">Account Info</h2>
-
-            {/* Name */}
+        <section className="mt-10 border-t-[1.5px] border-ink pt-5">
+          <h2 className="mb-4 text-lg font-bold">Account</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-gray-400 text-sm">Name</label>
-
-              <input
-                value={user?.name || ""}
-                disabled
-                className="w-full mt-1 p-3 rounded bg-gray-800 text-gray-300 cursor-not-allowed"
-              />
+              <label htmlFor="p-name" className="mb-1.5 block text-sm font-semibold">Name</label>
+              <input id="p-name" value={user?.name || ""} disabled className="field" />
             </div>
-
-            {/* Email */}
             <div>
-              <label className="text-gray-400 text-sm">Email</label>
-
-              <input
-                value={user?.email || ""}
-                disabled
-                className="w-full mt-1 p-3 rounded bg-gray-800 text-gray-300 cursor-not-allowed"
-              />
+              <label htmlFor="p-email" className="mb-1.5 block text-sm font-semibold">Email</label>
+              <input id="p-email" value={user?.email || ""} disabled className="field" />
             </div>
           </div>
+        </section>
 
-          {/* Right Card */}
-          <div className="lg:col-span-2 bg-[#111827] p-6 rounded-2xl shadow-lg space-y-5">
-            <h2 className="text-lg font-semibold">Coding Profiles</h2>
+        <section className="mt-10 border-t-[1.5px] border-ink pt-5">
+          <h2 className="mb-4 text-lg font-bold">Coding profiles</h2>
 
-            {/* GitHub */}
+          <div className="space-y-5">
             <div>
-              <label className="text-gray-400 text-sm">
-                GitHub Username
-              </label>
-
+              <label htmlFor="githubUsername" className="mb-1.5 block text-sm font-semibold">GitHub username</label>
               <input
+                id="githubUsername"
                 type="text"
                 name="githubUsername"
                 value={form.githubUsername}
                 onChange={handleChange}
-                placeholder="Enter GitHub username"
-                className="w-full mt-1 p-3 rounded bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="field"
               />
-
               {form.githubUsername && (
-                <a
-                  href={`https://github.com/${form.githubUsername}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-400 text-sm mt-2 inline-block hover:underline"
-                >
-                  View GitHub →
+                <a href={`https://github.com/${form.githubUsername}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold text-pen underline underline-offset-4">
+                  Open github.com/{form.githubUsername}
                 </a>
               )}
             </div>
 
-            {/* LeetCode */}
             <div>
-              <label className="text-gray-400 text-sm">
-                LeetCode Username
-              </label>
-
+              <label htmlFor="leetcodeUsername" className="mb-1.5 block text-sm font-semibold">LeetCode username</label>
               <input
+                id="leetcodeUsername"
                 type="text"
                 name="leetcodeUsername"
                 value={form.leetcodeUsername}
                 onChange={handleChange}
-                placeholder="Enter LeetCode username"
-                className="w-full mt-1 p-3 rounded bg-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="field"
               />
-
               {form.leetcodeUsername && (
-                <a
-                  href={`https://leetcode.com/${form.leetcodeUsername}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-yellow-400 text-sm mt-2 inline-block hover:underline"
-                >
-                  View LeetCode →
+                <a href={`https://leetcode.com/${form.leetcodeUsername}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold text-pen underline underline-offset-4">
+                  Open leetcode.com/{form.leetcodeUsername}
                 </a>
               )}
             </div>
 
-            {/* Bio */}
             <div>
-              <label className="text-gray-400 text-sm">Bio</label>
-
+              <label htmlFor="bio" className="mb-1.5 block text-sm font-semibold">Bio</label>
               <textarea
+                id="bio"
                 name="bio"
                 value={form.bio}
                 onChange={handleChange}
-                placeholder="Write something about yourself..."
-                className="w-full mt-1 p-3 rounded bg-gray-800 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-purple-600"
+                placeholder="What are you learning right now?"
+                className="field h-28 resize-none"
               />
             </div>
 
-            {/* Save Button */}
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className={`w-full py-3 rounded-lg font-semibold transition duration-300 ${
-                saving
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              {saving ? "Saving..." : "Save Changes"}
+            <button onClick={handleSave} disabled={saving} className="btn btn-primary">
+              {saving ? "Saving" : "Save changes"}
             </button>
           </div>
-        </div>
+        </section>
       </div>
     </>
   );

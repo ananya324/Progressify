@@ -7,11 +7,7 @@ export default function Register() {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,11 +21,7 @@ export default function Register() {
       // Auto login after register
       authLogin({
         token: res.token,
-        user: {
-          _id: res._id,
-          name: res.name,
-          email: res.email,
-        },
+        user: { _id: res._id, name: res.name, email: res.email },
       });
 
       navigate("/dashboard");
@@ -39,54 +31,37 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-black">
+    <div className="mx-auto grid min-h-[calc(100vh-64px)] max-w-5xl items-center gap-12 bg-paper px-5 py-12 md:grid-cols-2 md:px-8">
+      <div>
+        <h1 className="text-4xl font-extrabold md:text-5xl">Start your first streak.</h1>
+        <p className="mt-4 max-w-sm text-ink-soft">
+          Add a link, open it today, and your heatmap has its first square.
+        </p>
+      </div>
 
-      <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-xl p-8 w-full max-w-md">
+      <form onSubmit={handleSubmit} className="space-y-5 border-[1.5px] border-ink bg-sheet p-7 shadow-[6px_6px_0_var(--color-mark)]">
+        <div>
+          <label htmlFor="name" className="mb-1.5 block text-sm font-semibold">Full name</label>
+          <input id="name" name="name" autoComplete="name" onChange={handleChange} className="field" />
+        </div>
+        <div>
+          <label htmlFor="email" className="mb-1.5 block text-sm font-semibold">Email</label>
+          <input id="email" name="email" type="email" autoComplete="email" onChange={handleChange} className="field" />
+        </div>
+        <div>
+          <label htmlFor="password" className="mb-1.5 block text-sm font-semibold">Password</label>
+          <input id="password" name="password" type="password" autoComplete="new-password" onChange={handleChange} className="field" />
+        </div>
 
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
-          Create Account
-        </h2>
+        <button type="submit" className="btn btn-primary w-full">Create account</button>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-
-          <input
-            name="name"
-            placeholder="Full Name"
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-
-          <input
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 transition-all text-white font-semibold py-3 rounded-lg"
-          >
-            Register
-          </button>
-        </form>
-
-        <p className="text-gray-400 text-sm text-center mt-5">
+        <p className="text-sm text-ink-soft">
           Already have an account?{" "}
-          <Link to="/login" className="text-indigo-400 hover:underline">
-            Login
+          <Link to="/login" className="font-semibold text-pen underline underline-offset-4">
+            Log in
           </Link>
         </p>
-
-      </div>
+      </form>
     </div>
   );
 }

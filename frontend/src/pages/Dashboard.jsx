@@ -6,11 +6,8 @@ import { getMyStats } from "../api/stats.api";
 
 import ActivityHeatmap from "../components/ActivityHeatmap";
 
-import { SiLeetcode } from "react-icons/si";
-import { FaGithub, FaCheckCircle } from "react-icons/fa";
-import { FiActivity, FiBookOpen, FiArrowRight } from "react-icons/fi";
-import { MdOutlineBolt } from "react-icons/md";
-import { GiBroadsword } from "react-icons/gi";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
   const [courses, setCourses] = useState([]);
@@ -18,6 +15,7 @@ export default function Dashboard() {
   const [githubData, setGithubData] = useState(null);
   const [leetcodeData, setLeetcodeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   // ================= FETCH =================
 useEffect(() => {
@@ -74,159 +72,111 @@ useEffect(() => {
     activity.find((a) => a.date === todayStr)?.count || 0;
 
   // ================= UI =================
+  const githubDays =
+    githubData?.contributions?.filter((d) => d.count > 0).length || 0;
+  const solved = leetcodeData?.totalSolved || 0;
+  const firstName = user?.name?.split(" ")[0];
+
   return (
-    <div className="min-h-screen px-6 md:px-10 py-8 text-white bg-gradient-to-b from-[#0b0f1a] to-black">
-
+    <div className="mx-auto max-w-5xl">
       {/* HEADER */}
-      <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-semibold">
-          Welcome back, <span className="text-blue-400">Learner</span>
-        </h1>
-        <p className="text-gray-400 text-sm">
-          Ready to continue your journey today?
-        </p>
-      </div>
-
-      {/* COURSES */}
-      <div className="mb-8 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <FiBookOpen className="text-blue-400" />
-          <h2 className="text-xl font-semibold">Courses</h2>
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold md:text-4xl">
+            {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+          </h1>
+          <p className="mt-1 text-ink-soft">
+            {todayActivity > 0
+              ? `You've logged ${todayActivity} ${todayActivity === 1 ? "action" : "actions"} today.`
+              : "Nothing logged yet today. Open a course to start your square."}
+          </p>
         </div>
+        <Link to="/my-courses" className="btn btn-primary">
+          Go to my courses
+        </Link>
+      </header>
 
-        <button
-          onClick={() => (window.location.href = "/my-courses")}
-          className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-lg"
-        >
-          Continue <FiArrowRight />
-        </button>
-      </div>
+      {/* NUMBERS */}
+      <dl className="mt-9 grid grid-cols-2 border-y-[1.5px] border-ink md:grid-cols-4">
+        <Stat label="LeetCode solved" value={solved} />
+        <Stat label="GitHub active days" value={githubDays} />
+        <Stat label="Actions today" value={todayActivity} />
+        <Stat label="Saved courses" value={courses.length} />
+      </dl>
 
-      {/* INSIGHTS */}
-      <div className="bg-gray-900/60 rounded-xl p-4 mb-8 space-y-4">
-        <StatRow
-          icon={<SiLeetcode />}
-          label="LeetCode"
-          value={leetcodeData?.totalSolved || 0}
-        />
-
-        <StatRow
-          icon={<FaGithub />}
-          label="GitHub Days"
-          value={
-            githubData?.contributions?.filter((d) => d.count > 0).length || 0
-          }
-        />
-
-        <StatRow
-          icon={<FiActivity />}
-          label="Status"
-          value={
-            (leetcodeData?.totalSolved || 0) > 50
-              ? "Consistent"
-              : "Beginner"
-          }
-        />
-      </div>
+      {/* ACTIVITY */}
+      <Section title="Your activity" extra="Last 12 months">
+        {loading ? (
+          <div className="h-32 animate-pulse bg-rule/50" />
+        ) : (
+          <ActivityHeatmap data={activity} />
+        )}
+      </Section>
 
       {/* GITHUB */}
-      <Section title="GitHub Activity" icon={<FaGithub />}>
+      <Section title="GitHub contributions">
         {!githubData ? (
-          <p>Loading...</p>
+          <p className="text-ink-soft">
+            No GitHub data yet. Add your username on the{" "}
+            <Link to="/profile" className="font-semibold text-pen underline underline-offset-4">profile page</Link>.
+          </p>
         ) : (
           <ActivityHeatmap data={githubFormatted} />
         )}
       </Section>
 
       {/* LEETCODE */}
-      <Section title="LeetCode Activity" icon={<SiLeetcode />}>
+      <Section title="LeetCode">
         {!leetcodeData ? (
-          <p>Loading...</p>
+          <p className="text-ink-soft">
+            No LeetCode data yet. Add your username on the{" "}
+            <Link to="/profile" className="font-semibold text-pen underline underline-offset-4">profile page</Link>.
+          </p>
         ) : (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between bg-white/5 px-4 py-2 rounded-xl">
-              <div className="flex items-center gap-2 text-gray-300">
-                <FiActivity className="text-blue-400" />
-                <span>Total Solved</span>
-              </div>
-              <span className="font-semibold text-white">
-                {leetcodeData.totalSolved}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between bg-green-500/10 px-4 py-2 rounded-xl">
-              <div className="flex items-center gap-2 text-green-300">
-                <FaCheckCircle />
-                <span>Easy</span>
-              </div>
-              <span className="font-semibold text-white">
-                {leetcodeData.easySolved}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between bg-yellow-500/10 px-4 py-2 rounded-xl">
-              <div className="flex items-center gap-2 text-yellow-300">
-                <MdOutlineBolt />
-                <span>Medium</span>
-              </div>
-              <span className="font-semibold text-white">
-                {leetcodeData.mediumSolved}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between bg-red-500/10 px-4 py-2 rounded-xl">
-              <div className="flex items-center gap-2 text-red-300">
-                <GiBroadsword />
-                <span>Hard</span>
-              </div>
-              <span className="font-semibold text-white">
-                {leetcodeData.hardSolved}
-              </span>
-            </div>
-          </div>
+          <ul className="max-w-md">
+            <Row label="Easy" value={leetcodeData.easySolved} total={solved} />
+            <Row label="Medium" value={leetcodeData.mediumSolved} total={solved} />
+            <Row label="Hard" value={leetcodeData.hardSolved} total={solved} />
+          </ul>
         )}
       </Section>
-
-      {/* ACTIVITY */}
-      <Section
-        title="Your Activity"
-        icon={<FiActivity />}
-        extra={`Today: ${todayActivity}`}
-      >
-        {loading ? (
-          <div className="h-32 bg-white/5 animate-pulse rounded" />
-        ) : (
-          <ActivityHeatmap data={activity} />
-        )}
-      </Section>
-
     </div>
   );
 }
 
 // ================= SMALL COMPONENTS =================
-function StatRow({ icon, label, value }) {
+function Stat({ label, value }) {
   return (
-    <div className="flex justify-between items-center text-gray-300">
-      <div className="flex gap-2 items-center">
-        {icon}
-        <span>{label}</span>
-      </div>
-      <span className="text-white font-semibold">{value}</span>
+    <div className="border-b border-rule px-1 py-5 md:border-b-0 md:border-r md:px-6 md:first:pl-0 md:last:border-r-0">
+      <dd className="text-4xl font-extrabold tabular-nums">{value}</dd>
+      <dt className="mt-1 text-sm text-ink-soft">{label}</dt>
     </div>
   );
 }
 
-function Section({ title, icon, children, extra }) {
+function Row({ label, value, total }) {
+  const pct = total ? Math.round((value / total) * 100) : 0;
   return (
-    <div className="bg-white/5 border border-white/10 p-6 rounded-xl mb-10">
-      <div className="flex justify-between mb-4">
-        <h2 className="flex items-center gap-2">
-          {icon} {title}
-        </h2>
-        {extra && <span className="text-sm text-gray-400">{extra}</span>}
+    <li className="grid grid-cols-[5rem_1fr_3rem] items-center gap-4 border-b border-rule py-3">
+      <span className="font-semibold">{label}</span>
+      <span className="h-3 bg-[#dfe2d7]" role="img" aria-label={`${pct}% of solved problems`}>
+        <span className="block h-full bg-ink" style={{ width: `${pct}%` }} />
+      </span>
+      <span className="text-right font-bold tabular-nums">{value}</span>
+    </li>
+  );
+}
+
+function Section({ title, children, extra }) {
+  return (
+    <section className="mt-12">
+      <div className="mb-4 flex items-baseline justify-between gap-4">
+        <h2 className="text-xl font-bold">{title}</h2>
+        {extra && <span className="text-sm text-ink-soft">{extra}</span>}
       </div>
-      {children}
-    </div>
+      <div className="overflow-x-auto no-scrollbar">
+        <div className="min-w-[640px]">{children}</div>
+      </div>
+    </section>
   );
 }

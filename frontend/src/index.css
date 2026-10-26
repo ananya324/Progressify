@@ -1,146 +1,114 @@
 @import "tailwindcss";
 
+/* Progressify — study-desk theme.
+   paper = the page, ink = text and structure, mark = highlighter (the one loud colour),
+   pen = blue ballpoint, used only for links and primary actions. */
+@theme {
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
 
-.animate-scroll {
-  display: flex;
-  width: max-content;
-  animation: scroll 25s linear infinite;
+  --color-paper: #f1f2ec;
+  --color-sheet: #fafaf6;
+  --color-ink: #16201b;
+  --color-ink-soft: #4a554f;
+  --color-rule: #d3d6cb;
+  --color-mark: #f2e53d;
+  --color-mark-soft: #f7efa0;
+  --color-pen: #2a3bc4;
+  --color-pen-dark: #1c2a98;
+  --color-alert: #b3361f;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-@keyframes glowText {
-  0%, 100% {
-    color: white;
-    text-shadow: none;
+@layer base {
+  html { color-scheme: light; }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
   }
-  50% {
-    color: #22d3ee;
-    text-shadow: 0 0 18px rgba(34, 211, 238, 0.9);
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
-}
-
-.animate-glow1 { animation: glowText 6s infinite; animation-delay: 0s; }
-.animate-glow2 { animation: glowText 6s infinite; animation-delay: 0.8s; }
-.animate-glow3 { animation: glowText 6s infinite; animation-delay: 1.6s; }
-.animate-glow4 { animation: glowText 6s infinite; animation-delay: 2.4s; }
-.animate-glow5 { animation: glowText 6s infinite; animation-delay: 3.2s; }
-.animate-glow6 { animation: glowText 6s infinite; animation-delay: 4s; }
-
-
-/* Hide scrollbar but keep scroll functionality */
-.custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-
-/* Optional: show on hover (premium feel) */
-.custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
-  border-radius: 999px;
-}
-
-/* Firefox */
-.custom-scrollbar {
-  scrollbar-width: none;
-}
-
-/* Optional hover for Firefox (not perfect support) */
-.custom-scrollbar:hover {
-  scrollbar-width: thin;
-}
-
-
-.react-calendar-heatmap text {
-  fill: #6b7280;
-  font-size: 10px;
-}
-
-/* EMPTY */
-.react-calendar-heatmap .color-empty {
-  fill: #161b22;
-}
-
-/* LOW */
-.react-calendar-heatmap .color-github-1 {
-  fill: #9be9a8;
-}
-
-/* MEDIUM */
-.react-calendar-heatmap .color-github-2 {
-  fill: #40c463;
-}
-
-/* HIGH */
-.react-calendar-heatmap .color-github-3 {
-  fill: #30a14e;
-}
-
-/* VERY HIGH */
-.react-calendar-heatmap .color-github-4 {
-  fill: #216e39;
-}
-
-/* CELLS */
-.react-calendar-heatmap rect {
-  rx: 3px;
-  ry: 3px;
-  transition: all 0.2s ease;
-}
-
-/* HOVER */
-.react-calendar-heatmap rect:hover {
-  transform: scale(1.1);
-  stroke: rgba(255,255,255,0.7);
-  stroke-width: 1px;
-}
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes scrollReverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-
-.animate-scroll-reverse {
-  animation: scrollReverse 30s linear infinite;
-}
-
-.animate-scroll:hover,
-.animate-scroll-reverse:hover {
-  animation-play-state: paused;
-}
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 2px solid var(--color-pen);
+    outline-offset: 2px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  ::selection { background: var(--color-mark); color: var(--color-ink); }
 }
 
-.animate-slideIn {
-  animation: slideIn 0.3s ease;
+/* Highlighter swipe behind a run of text */
+.mark {
+  background-image: linear-gradient(transparent 55%, var(--color-mark) 55%, var(--color-mark) 92%, transparent 92%);
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
+
+/* Form fields */
+.field {
+  width: 100%;
+  background: var(--color-sheet);
+  border: 1.5px solid var(--color-ink);
+  border-radius: 2px;
+  padding: 0.7rem 0.85rem;
+  color: var(--color-ink);
+}
+.field::placeholder { color: #86908a; }
+.field:focus { outline: 2px solid var(--color-pen); outline-offset: 1px; border-color: var(--color-pen); }
+.field:disabled { background: transparent; border-style: dashed; border-color: var(--color-rule); color: var(--color-ink-soft); cursor: not-allowed; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  font-weight: 600;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 2px;
+  transition: transform 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+  cursor: pointer;
+}
+.btn:active { transform: translate(1px, 1px); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--color-ink); color: var(--color-paper); box-shadow: 3px 3px 0 var(--color-mark); }
+.btn-primary:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--color-mark); }
+.btn-primary:active { box-shadow: 1px 1px 0 var(--color-mark); }
+.btn-ghost { background: transparent; color: var(--color-ink); }
+.btn-ghost:hover:not(:disabled) { background: var(--color-mark-soft); }
+
+/* Scrollbars */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Heatmap — luminance steps dark as activity grows, so it reads without colour */
+.react-calendar-heatmap text { fill: var(--color-ink-soft); font-size: 9px; font-family: var(--font-sans); }
+.react-calendar-heatmap rect { rx: 1px; ry: 1px; }
+.react-calendar-heatmap rect.color-empty { fill: #dfe2d7; }
+.react-calendar-heatmap rect.color-github-1 { fill: #f3e977; }
+.react-calendar-heatmap rect.color-github-2 { fill: #e2cb1a; }
+.react-calendar-heatmap rect.color-github-3 { fill: #8f7f00; }
+.react-calendar-heatmap rect.color-github-4 { fill: #16201b; }
+.react-calendar-heatmap rect:hover { stroke: var(--color-pen); stroke-width: 1.5px; }
+
+/* One entrance: the home hero marks fill in once on load */
+@keyframes markIn { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+.mark-draw {
+  background-image: linear-gradient(var(--color-mark), var(--color-mark));
+  background-repeat: no-repeat;
+  background-position: 0 70%;
+  background-size: 100% 36%;
+  animation: markIn 700ms 250ms cubic-bezier(.6,0,.2,1) both;
+}
+@keyframes sweep { from { background-size: 0% 36%; } to { background-size: 100% 36%; } }
+.mark-draw { animation-name: sweep; }
+
+@keyframes scroll { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@keyframes cellIn { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
